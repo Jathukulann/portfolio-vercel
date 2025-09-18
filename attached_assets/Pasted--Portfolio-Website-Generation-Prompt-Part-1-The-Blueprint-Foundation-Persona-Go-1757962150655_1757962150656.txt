@@ -1,0 +1,109 @@
+# Portfolio Website Generation Prompt
+
+## **Part 1: The Blueprint & Foundation**
+
+### **Persona & Goal**
+
+You are an expert-level front-end developer and UI/UX designer. Your specialty is creating award-winning, interactive, and highly performant portfolio websites that function as meticulously crafted digital products.
+
+Your goal is to build a personal portfolio website for me, **Jathukulan**, a **Full-Stack Developer**. This website must be a direct demonstration of my skills, balancing **Design, Usability, Creativity, and Content**. It should be deeply interactive, exceptionally performant, and tell a compelling narrative about my work.
+
+### **Technology Stack**
+
+* **Framework:** Next.js (React)
+* **Styling:** Tailwind CSS
+* **Animation:** GSAP (GreenSock Animation Platform) with the ScrollTrigger plugin for complex animations. CSS animations will be used for simpler, performant microinteractions.
+
+### **Core Principles**
+
+* **Aesthetic:** The design language is **"Dark & Professional Minimalism."** It uses a dark theme, clean typography, and strategic negative space to create a modern, focused experience.
+* **Interaction:** Every interaction must create a sense of "digital delight." The goal is a tactile and responsive user experience that feels intentional and fluid.
+* **Narrative:** The site's primary purpose is to tell the story of my work. This will be achieved through a persuasive case study structure that focuses on process and impact.
+* **Performance & Accessibility:** The site must be highly performant, with fast load times and smooth animations. It must adhere to accessibility standards, including support for reduced motion preferences.
+
+## **Part 2: The Global Design System**
+
+### **Global Styles**
+
+Generate the `globals.css` file using Tailwind CSS `@layer` directives.
+
+* **Typography:**
+    * Import and apply the **'Inter'** font for body text and **'Poppins'** for headings from Google Fonts.
+    * Establish a responsive fluid typography scale using `clamp()` for all heading levels (h1-h4) and body text.
+* **Color Palette (in `tailwind.config.js`):**
+    * `background`: '#0a192f' (dark navy)
+    * `primary`: '#ccd6f6' (light slate text)
+    * `secondary`: '#8892b0' (slate text)
+    * `accent`: '#64ffda' (bright cyan highlight)
+* **Layout:**
+    * Establish a consistent spacing scale based on an 8px grid.
+    * Define a main page container centered with a max-width of `1440px` and horizontal padding.
+
+## **Part 3: Core Interactive Components**
+
+### **Component: Preloader**
+
+Create a React component `Preloader.js`.
+* **Function:** It must entertain the user while assets load and set the site's professional tone.
+* **Structure:** A `div` covering the entire viewport with a high `z-index` and the site's background color.
+* **Animation:** Inside, render a lightweight, self-drawing SVG animation of my initials "JS". This must be a pure CSS or lightweight SVG animation, not a GIF.
+* **Logic:** The preloader must have a maximum duration of 3 seconds. After the page loads, it should fade out smoothly. Upon completion of the fade-out, set its `display` to `none`.
+
+### **Component: Custom Cursor**
+
+Create a React component `CustomCursor.js`.
+* **Structure:** Render two `div` elements: `main-cursor` (a small solid dot) and `follower-cursor` (a larger outlined circle). Both must have `pointer-events: none`.
+* **Logic:** Use GSAP to make the `follower-cursor` smoothly trail the `main-cursor` with a slight delay (`duration: 0.3`), creating a fluid effect.
+* **Interaction State:** When the mouse enters any interactive element (links, buttons), use GSAP to scale up the `follower-cursor` and change its background to the accent color, providing clear visual feedback.
+
+### **Component: Magnetic Button**
+
+Create a reusable React hook `useMagneticEffect`.
+* **Functionality:** This hook will take a React `ref` as an argument and apply a "magnetic" pull effect.
+* **Implementation:** Use GSAP's `gsap.quickTo()` for high-performance animation. On `mousemove`, calculate the cursor's position relative to the element's center and animate the element towards the cursor with an elastic ease (`ease: 'elastic.out(1, 0.3)'`). On `mouseleave`, animate the element smoothly back to its origin.
+
+## **Part 4: Content Structure & Page Layout**
+
+### **Homepage: Hero Section**
+
+* A full-screen section with a bold, animated headline that types out: **"Hi, I'm Jathukulan."** followed by **"A Full-Stack Developer Building Tomorrow's Web."**
+* **Animation:** Use GSAP with ScrollTrigger to create a cinematic intro. As the user scrolls down, the headline text will move up and fade out, while a background element subtly scales up, creating a parallax zoom effect.
+
+### **Homepage: Projects Section**
+
+* Create two components: `ProjectGrid.js` and `ProjectCard.js`.
+* `ProjectGrid.js` will render a responsive grid of my projects.
+* `ProjectCard.js` will represent a single project.
+    * **On-Scroll Reveal Animation:** Each card must have a reveal animation when it scrolls into view. Implement this with the performant CSS technique:
+        ```css
+        .reveal-card {
+          animation: reveal linear forwards;
+          animation-timeline: view();
+          animation-range: entry 25% cover 50%;
+        }
+        @keyframes reveal {
+          from { clip-path: inset(25%); opacity: 0; }
+          to { clip-path: inset(0%); opacity: 1; }
+        }
+        ```
+    * **Hover Interaction:** On hover, the project image should smoothly scale up (`transform: scale(1.05)`).
+
+### **Dynamic Page: Case Study Template**
+
+Generate a dynamic page template in Next.js at `/projects/[slug].js`. This page must be built with distinct components for each section, following the persuasive case study framework.
+
+* **Component Structure:**
+    1.  **CaseStudyHero:** Displays the project title, a full-bleed hero image, and 3 key success metrics (e.g., "25% Conversion Increase").
+    2.  **ProjectOverview:** A clean two-column layout showing my Role, Team, Tools, and Duration.
+    3.  **TheProblem:** A section clearly defining the user and business challenges.
+    4.  **TheProcess:** A flexible section for text and images (sketches, wireframes) explaining *why* certain methods were chosen and what was learned.
+    5.  **TheSolution:** A section to showcase high-resolution mockups and embedded prototypes.
+    6.  **TheImpact:** A visually distinct section proving the project's value with quantitative data (analytics) and qualitative feedback (testimonials).
+    7.  **Learnings:** A final section for thoughtful reflection on challenges and professional growth.
+
+## **Part 5: Final Optimizations**
+
+### **Accessibility & Performance**
+
+* **Reduced Motion:** All major GSAP timelines and significant CSS animations must be wrapped in a `window.matchMedia('(prefers-reduced-motion: reduce)')` check. Do not run animations if the user prefers reduced motion.
+* **Performance Hinting:** Apply the CSS property `will-change: transform, opacity;` to all elements that will be heavily animated (like the custom cursor and magnetic buttons) to ensure smooth rendering.
